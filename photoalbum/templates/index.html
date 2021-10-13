@@ -1,10 +1,29 @@
 {%extends 'base.html'%}
-{% block content %} 
+{% block content %}
 {{ block.super}}
 
 <div class="container">
-
-  
+  {% for image in images %}
+  <div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="{{image.image_path}}" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">{{ image.name }}</h5>
+      <p class="card-text">{{ image.description }}</p>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">{{ image.category }}</li>
+      <li class="list-group-item">{{ image.location }}</li>
+      <li class="list-group-item">Vestibulum at eros</li>
+    </ul>
+    <div class="card-body">
+      <a href="#" class="card-link">Card link</a>
+      <a href="#" class="card-link">Another link</a>
+    </div>
+  </div>
+  {% empty %}
+  <div class="row">
+    <h2 class="text-center">There No images/h2>
+  </div>
+  {% endfor %}
 </div>
-
 {% endblock %}
