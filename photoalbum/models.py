@@ -50,7 +50,7 @@ class Image(models.Model):
 
     @classmethod
     def search_image(cls, category):
-        images = cls.objects.filter(category__icontains=category)
+        images = cls.objects.filter(category__category__icontains=category)
         return images
 
     def delete_image(self):
