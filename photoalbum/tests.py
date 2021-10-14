@@ -1,52 +1,103 @@
 from django.test import TestCase
-from .models import Editor,Article,tags
-import datetime as dt
 
-class EditorTestClass(TestCase):
+from .models import Image, Category, Location
 
-    # Set up method
+
+class TestImage(TestCase):
     def setUp(self):
-        self.james= Editor(first_name = 'James', last_name ='Muriuki', email ='james@moringaschool.com')
+        self.location = Location(name='Moringa')
+        self.location.save_location()
 
-    # Testing  instance
+        self.category = Category(name='home')
+        self.category.save_category()
+
+        self.image_test = Image(id=1, name='image', description='this is a test image', location=self.location,
+                                category=self.category)
+
     def test_instance(self):
-        self.assertTrue(isinstance(self.james,Editor))
+        self.assertTrue(isinstance(self.image_test, Image))
 
-    # Testing Save Method
-    def test_save_method(self):
-        self.james.save_editor()
-        editors = Editor.objects.all()
-        self.assertTrue(len(editors) > 0)
+    def test_save_image(self):
+        self.image_test.save_image()
+        after = Image.objects.all()
+        self.assertTrue(len(after) > 0)
 
-class ImageTestClass(TestCase):
+    def test_delete_image(self):
+        self.image_test.delete_image()
+        images = Image.objects.all()
+        self.assertTrue(len(images) == 0)
 
-    def setUp(self):
-        # Creating a new editor and saving it
-        self.james= Editor(first_name = 'James', last_name ='Muriuki', email ='james@moringaschool.com')
-        self.james.save_editor()
+    def test_update_image(self):
+        self.image_test.save_image()
+        self.image_test.update_image(self.image_test.id, 'photos/test.jpg')
+        changed_img = Image.objects.filter(image='photos/test.jpg')
+        self.assertTrue(len(changed_img) > 0)
 
-        # Creating a new tag and saving it
-        self.new_tag = tags(name = 'testing')
-        self.new_tag.save()
+    def test_get_image_by_id(self):
+        found_image = self.image_test.get_image_by_id(self.image_test.id)
+        image = Image.objects.filter(id=self.image_test.id)
+        self.assertTrue(found_image, image)
 
-        self.new_article= Article(title = 'Test Article',post = 'This is a random test Post',editor = self.james)
-        self.new_article.save()
+    def test_search_image_by_location(self):
+        self.image_test.save_image()
+        found_images = self.image_test.filter_by_location(location='moringa')
+        self.assertTrue(len(found_images) == 1)
 
-        self.new_article.tags.add(self.new_tag)
+    def test_search_image_by_category(self):
+        category = 'home'
+        found_img = self.image_test.search_by_category(category)
+        self.assertTrue(len(found_img) > 1)
 
     def tearDown(self):
-        Editor.objects.all().delete()
-        tags.objects.all().delete()
-        Article.objects.all().delete()
+        Image.objects.all().delete()
+        Location.objects.all().delete()
+        Category.objects.all().delete()
 
-    def test_get_news_today(self):
-        today_news = Article.todays_news()
-        self.assertTrue(len(today_news)>0)
 
-    def test_get_news_by_date(self):
-        test_date = '2017-03-17'
-        date = dt.datetime.strptime(test_date, '%Y-%m-%d').date()
-        news_by_date = Article.days_news(date)
-        self.assertTrue(len(news_by_date) == 0)
+class TestLocation(TestCase):
+    def setUp(self):
+        self.location = Location(name='Moringa')
+        self.location.save_location()
 
-    
+    def test_instance(self):
+        self.assertTrue(isinstance(self.location, Location))
+
+    def test_save_location(self):
+        self.location.save_location()
+        locations = Location.get_locations()
+        self.assertTrue(len(locations) > 0)
+
+    def test_get_locations(self):
+        self.location.save_location()
+        locations = Location.get_locations()
+        self.assertTrue(len(locations) > 1)
+
+    def test_update_location(self):
+        new_location = 'kericho'
+        self.location.update_location(self.location.id, new_location)
+        changed_location = Location.objects.filter(name='kericho')
+        self.assertTrue(len(changed_location) > 0)
+
+    def test_delete_location(self):
+        self.location.delete_location()
+        location = Location.objects.all()
+        self.assertTrue(len(location) == 0)
+
+
+class CategoryTestClass(TestCase):
+    def setUp(self):
+        self.category = Category(name='home')
+        self.category.save_category()
+
+    def test_instance(self):
+        self.assertTrue(isinstance(self.category, Category))
+
+    def test_save_category(self):
+        self.category.save_category()
+        categories = Category.objects.all()
+        self.assertTrue(len(categories) > 0)
+
+    def test_delete_category(self):
+        self.category.delete_category()
+        category = Category.objects.all()
+        self.assertTrue(len(category) == 0)
