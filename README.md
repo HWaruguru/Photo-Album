@@ -77,4 +77,4 @@ If you have any question or contributions, please email me at [hannah.waruguru8@
 ## License 
 
 * [![License](https://img.shields.io/packagist/l/loopline-systems/closeio-api-wrapper.svg)](https://github.com/HWaruguru/Photo-Album/blob/master/LICENSE)  
-* Copyright (c) 2019 **Hannah Waruguru**
+* Copyright (c) 2021 **Hannah Waruguru**
