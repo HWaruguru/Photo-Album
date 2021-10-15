@@ -3,7 +3,7 @@
   
 >[HWaruguru](https://github.com/HWaruguru)  
 # Description  
-This is a Django application for personal gallery that allows a user to upload images for other to see and be able to to share by copying the image link.
+This is a Django application for a personal gallery that allows a user to upload images for others to see and be able to share by copying the image link.
   
 ##  Live Link  
  Click [View Site](https://photoalbumhan.herokuapp.com/)  to visit the site
